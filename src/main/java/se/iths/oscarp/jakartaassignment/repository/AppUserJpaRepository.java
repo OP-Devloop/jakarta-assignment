@@ -25,4 +25,13 @@ public class AppUserJpaRepository implements AppUserRepository {
         return entityManager.createQuery(
                 "SELECT u FROM AppUser u", AppUser.class).getResultList();
     }
+
+    public AppUser findAppUser(String username, String password) {
+        return entityManager.createQuery(
+                        "SELECT u FROM AppUser u WHERE u.username = :username " +
+                                "AND u.password = :password", AppUser.class)
+                .setParameter("username", username)
+                .setParameter("password", password)
+                .getSingleResult();
+    }
 }

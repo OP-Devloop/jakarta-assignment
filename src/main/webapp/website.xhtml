@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+<f:view>
+    <h:head></h:head>
+
+    <h:body>
+
+        <h2>Welcome #{loginBean.loggedInUser.username}</h2>
+
+        <h:form>
+            <h:commandButton value="Logout" action="#{loginBean.logout}"/>
+        </h:form>
+
+        <hr/>
+
+        <h3>Chat</h3>
+
+        <div id="messages"></div>
+
+        <input type="text" id="msg"/>
+        <button onclick="send()">Send</button>
+
+
+        <script>
+
+            let username = "#{loginBean.loggedInUser.username}";
+            let socket = new WebSocket("http://desktop-u7l9meo:8080/websocket-server/chat");
+
+            socket.onopen = () => {
+                console.log("Connected");
+            };
+
+            socket.onmessage = (event) => {
+
+                let div = document.getElementById("messages");
+
+                let p = document.createElement("p");
+
+                p.textContent = event.data;
+
+                div.appendChild(p);
+
+            };
+
+            function send() {
+
+                let text = document.getElementById("msg").value;
+
+                socket.send(username + ": " + text);
+
+                document.getElementById("msg").value = "";
+
+            }
+
+
+        </script>
+
+    </h:body>
+
+</f:view>
+</html>

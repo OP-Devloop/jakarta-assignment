@@ -9,4 +9,6 @@ public interface AppUserRepository {
 
     List<AppUser> findAllAppUsers();
 
+    AppUser findAppUser(String username, String password);
+
 }
